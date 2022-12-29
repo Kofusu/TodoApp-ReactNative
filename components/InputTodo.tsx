@@ -7,6 +7,7 @@ import {
   TextInput,
   View,
   Modal,
+  Image,
 } from "react-native";
 
 interface Props {
@@ -37,6 +38,7 @@ const InputTodo: FC<Props> = ({ visible, onClose, onAdd }) => {
   return (
     <Modal visible={visible} animationType={"slide"}>
       <KeyboardAvoidingView style={styles.container}>
+        <Image source={require("../assets/favicon.png")} style={styles.image} />
         <TextInput
           value={inputTodo}
           onChangeText={changeHandler}
@@ -72,6 +74,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  image: {
+    height: 75,
+    width: 75,
+    marginBottom: 16,
   },
   input: {
     borderBottomWidth: 1,
