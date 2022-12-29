@@ -35,9 +35,6 @@ const App: FC = () => {
 
   return (
     <SafeAreaView style={styles.appContainer}>
-      <TouchableOpacity style={styles.buttonAdd} activeOpacity={0.8} onPress={openModal}>
-        <Text style={styles.buttonAddText}>~ Click to Add Todo ~</Text>
-      </TouchableOpacity>
       <FlatList 
         data={todoList}
         renderItem={item => <TodoItem id={item.item.id} text={item.item.text} onDelete={deleteHandler} />} 
@@ -46,6 +43,9 @@ const App: FC = () => {
         showsVerticalScrollIndicator={false}
         
       />
+      <TouchableOpacity style={styles.buttonAdd} activeOpacity={0.8} onPress={openModal}>
+        <Text style={styles.buttonAddText}>~ Click to Add Todo ~</Text>
+      </TouchableOpacity>
       <InputTodo visible={modalIsVisible} onClose={closeModal} onAdd={addHandler} />
       <StatusBar style="auto" />
     </SafeAreaView>
