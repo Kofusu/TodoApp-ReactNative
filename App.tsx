@@ -1,20 +1,81 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, TouchableOpacity, FlatList } from "react-native";
+import { FC, useState } from "react";
 
-export default function App() {
+import InputTodo from "./components/InputTodo";
+import TodoItem from "./components/TodoItem";
+
+const App: FC = () => {
+  const [modalIsVisible, setModalIsVisible] = useState<boolean>(false);
+  const [todoList, setTodoList] = useState<{id: string, text: string}[]>([]);
+
+  function addHandler(text: string): void {
+    setTodoList(todo => {
+      return [...todo, {
+        id: Math.random().toString(),
+        text
+      }]
+    })
+    closeModal()
+  }
+
+  function deleteHandler(id: string): void {
+    setTodoList(todo => {
+      return todo.filter(item => item.id !== id)
+    })
+  }
+
+  function openModal(): void {
+    setModalIsVisible(true)
+  }
+
+  function closeModal(): void {
+    setModalIsVisible(false)
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+    <SafeAreaView style={styles.appContainer}>
+      <TouchableOpacity style={styles.buttonAdd} activeOpacity={0.8} onPress={openModal}>
+        <Text style={styles.buttonAddText}>~ Click to Add Todo ~</Text>
+      </TouchableOpacity>
+      <FlatList 
+        data={todoList}
+        renderItem={item => <TodoItem id={item.item.id} text={item.item.text} onDelete={deleteHandler} />} 
+        keyExtractor={item => item.id}
+        style={styles.todoList}
+        showsVerticalScrollIndicator={false}
+        
+      />
+      <InputTodo visible={modalIsVisible} onClose={closeModal} onAdd={addHandler} />
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
+  appContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    paddingTop: 32,
+    paddingBottom: 4,
+  },
+  buttonAdd: {
+    borderWidth: 1,
+    borderColor: "#000",
+    width: "100%",
+    alignItems: "center",
+  },
+  buttonAddText: {
+    color: "#000",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  todoList: {
+    paddingVertical: 4,
+    marginVertical: 8,
+    borderRadius: 20,
   },
 });
+
+export default App;
